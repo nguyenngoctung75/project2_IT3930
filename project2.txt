@@ -1,0 +1,50 @@
+Hãy viết cho tôi đoạn code tạo ra cơ sở dữ liệu trong mySQL với nội dung sau 
+1. Bảng user 
+id: Khóa chính kiểu interger để tự động tăng 
+email: string 
+password: string 
+username: String
+role: chọn 1 trong 3 role là author, admin, user
+2. Bảng story
+id
+uploader_id:id người đăng tải khóa ngoài ứng với id user tương ứng
+storyname
+author
+image
+rating: double -> dùng để lưu điểm đánh giá trung bình của độc giả
+num_rates: số lượng người like truyện
+num-views: số lượng người đọc 
+num_likes: số lượng người like
+3. Bảng ratings
+id
+story_id: khoa ngoai ung voi id story
+user_id: khoa ngoai ung voi id user
+rating: điểm đánh giá của 1 user với 1 story
+4. Bảng favorites -> user like story
+id 
+story_id
+user_id
+5. Bảng comment
+id
+story_id
+user_id -> nguoi dang binh luan
+reply_id -> nguoi phan hoi binh luan
+content
+6. status
+id 
+story_id
+story_status
+7. type
+id
+story_id
+story_type
+8. chapter
+id
+story_id
+chaptername
+chapternum
+content: nội dung rất dài
+9. reading_his
+id 
+chapter_id
+user_id
