@@ -7,13 +7,13 @@ exports.getAllStories = async (req, res) => {
         const stories = await Story.findAll()
 
         // Làm sạch content trước khi gửi về client
-        const cleanedStories = stories.map(story => ({
-            ...story.toJSON(),
-            content: cleanContent(story.content)  // Áp dụng hàm cleanContent
-        }));
-        // res.json(stories)
+        // const cleanedStories = stories.map(story => ({
+        //     ...story.toJSON(),
+        //     content: cleanContent(story.content)  // Áp dụng hàm cleanContent
+        // }));
+        res.json(stories)
 
-        res.status(200).json({ message: "Lấy danh sách truyện thành công", stories: cleanedStories });
+        // res.status(200).json({ message: "Lấy danh sách truyện thành công", stories: cleanedStories });
     } catch (error) {
         res.status(500).json({message: error.message + "Lỗi khi lấy danh sách truyện"})
     }

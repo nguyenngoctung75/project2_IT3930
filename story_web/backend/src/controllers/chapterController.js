@@ -16,13 +16,13 @@ exports.getChaptersByStoryId = async (req, res) => {
         }
 
         // Làm sạch content trước khi gửi về client
-        const cleanedChapters = chapters.map(chap => ({
-            ...chap.toJSON(),
-            content: cleanContent(chap.content)  // Áp dụng hàm cleanContent
-        }));
+        // const cleanedChapters = chapters.map(chap => ({
+        //     ...chap.toJSON(),
+        //     content: cleanContent(chap.content)  // Áp dụng hàm cleanContent
+        // }));
         
-        // res.json(chapters)
-        res.status(200).json({ message: "Lấy danh sách chương thành công", chapters: cleanedChapters });
+        res.json(chapters)
+        // res.status(200).json({ message: "Lấy danh sách chương thành công", chapters: cleanedChapters });
     } catch (error) {
         res.status(500).json({message: error.message + "Lỗi khi lấy danh sách chương theo id truyện"})
     }
