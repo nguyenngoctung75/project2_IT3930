@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database.js");
 const User = require("./User.js")
+const Type = require("./Type.js")
 
 const Story = sequelize.define("Story", {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -20,5 +21,8 @@ const Story = sequelize.define("Story", {
   createdAt: "created_at",
   updatedAt: "updated_at",
 });
+
+// Thiết lập quan hệ
+Story.hasMany(Type, { foreignKey: "story_id", as: "types", onDelete: 'CASCADE' }); // Thêm tùy chọn này để tự động xóa type khi story bị xóa 
 
 module.exports =  Story;

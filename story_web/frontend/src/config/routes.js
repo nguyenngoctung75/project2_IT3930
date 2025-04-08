@@ -4,7 +4,7 @@ const routes = {
     chapter: '/chapter',
     login: '/login',
     register: '/register',
-    category: '/category',
+    category: '/category/:category',
     search: '/search',
     profile: '/profile',
 }

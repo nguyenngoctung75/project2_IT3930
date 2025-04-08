@@ -1,5 +1,6 @@
 const { cleanContent } = require("../utils/cleanContent")
 const Story = require("../models/Story")
+const Type = require("../models/Type")
 
 //Lấy danh sách truyện
 exports.getAllStories = async (req, res) => {
@@ -19,6 +20,48 @@ exports.getAllStories = async (req, res) => {
     }
 }
 
+// API lấy danh sách truyện theo thể loại
+exports.getStoriesByType = async (req, res) => {
+    try {
+        // Map slug đến tên thể loại
+        const slugToType = {
+            'tien-hiep': 'Tiên Hiệp',
+            'kiem-hiep': 'Kiếm Hiệp',
+            'ngon-tinh': 'Ngôn Tình',
+            // Thêm các mapping khác tại đây
+        };
+
+        const typeSlug = req.params.category;
+        const typeName = slugToType[typeSlug] || typeSlug;
+
+        // Lấy danh sách story có type trùng khớp
+        const stories = await Story.findAll({
+            include: [{
+                model: Type,
+                as: 'types',
+                where: { story_type: typeName },
+                attributes: [], // Chỉ lọc, không lấy dữ liệu type
+                required: true // Sử dụng INNER JOIN thay vì LEFT JOIN
+            }],
+            order: [['created_at', 'DESC']] // Sắp xếp mới nhất trước
+        });
+
+        if (stories.length === 0) {
+            return res.status(404).json({ 
+                message: `Không tìm thấy truyện thuộc thể loại ${typeName}` 
+            });
+        }
+
+        res.json(stories);
+
+    } catch (error) {
+        console.error('Lỗi khi lấy truyện theo thể loại:', error);
+        res.status(500).json({ 
+            message: "Đã xảy ra lỗi khi tải truyện theo thể loại",
+            // error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
 // Lấy chi tiết truyện theo ID
 exports.getStoryById = async (req, res) => {
     try {
