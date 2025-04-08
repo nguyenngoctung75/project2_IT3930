@@ -1,0 +1,19 @@
+.chapter-page {
+    padding: 20px;
+    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .chapter-content {
+        white-space: pre-line;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+}

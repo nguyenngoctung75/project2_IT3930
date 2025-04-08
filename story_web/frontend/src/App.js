@@ -6,7 +6,7 @@ import DefaultLayout from '~/layouts';
 function App() {
     return (
         <Router>
-            <div className="App" style={{margin: -8}}>
+            <div className="App" style={{margin: -8, backgroundColor: '#E1E1E1'}}>
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;

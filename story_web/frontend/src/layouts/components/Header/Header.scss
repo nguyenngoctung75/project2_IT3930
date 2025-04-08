@@ -106,7 +106,8 @@
 }
 
 .header__breadcrumb {
-    background: #ECECEC;
+    background-color: #ECECEC;
+    color: var(--text-color);
     border-top: 1px solid var(--color-primary);
     font-size: 1.4rem;
     line-height: 2.2;

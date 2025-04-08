@@ -3,8 +3,8 @@ const router = express.Router();
 const storyController = require("../controllers/storyController");
 
 router.get("/", storyController.getAllStories);
-router.get("/:category", storyController.getStoriesByType);
 router.get("/:id", storyController.getStoryById);
+router.get("/category/:category", storyController.getStoriesByType);
 router.post("/", storyController.createStory);
 router.put("/:id", storyController.updateStory);
 router.delete("/:id", storyController.deleteStory);

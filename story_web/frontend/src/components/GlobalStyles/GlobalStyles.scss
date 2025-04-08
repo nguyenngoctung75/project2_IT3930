@@ -4,6 +4,8 @@
     --color-primary: #14425D;
     --color-primary-hover: #2f566d;
     --text-white-color: #FFF;
+    --background-color: #F3F3F3;
+    --text-color: #4E4E4E;
 }
 
 * {
@@ -47,7 +49,7 @@ body.light-theme {
 }
 
 .grid.wide {
-  max-width: 1155px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
@@ -182,7 +184,7 @@ body.light-theme {
 }
 
 /* >= Tablet */
-@media (min-width: 740px) {
+@media (min-width: 768px) {
   .row {
       margin-left: -8px;
       margin-right: -8px;
@@ -318,7 +320,7 @@ body.light-theme {
 }
 
 /* PC medium resolution > */
-@media (min-width: 1113px) {
+@media (min-width: 992px) {
   .row {
       margin-left: -12px;
       margin-right: -12px;

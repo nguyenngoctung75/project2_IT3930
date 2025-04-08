@@ -7,7 +7,7 @@ const CategoryPage = () => {
     const [stories, setStories] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/stories/${category}`)
+        axios.get(`http://localhost:5000/api/stories/category/${category}`)
             .then(response => {
                 console.log("Dữ liệu truyện:", response.data);
                 setStories(response.data)})
