@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faList } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import config from "~/config";
 import './Header.scss';
 import logo from '~/assets/images/header-logo.png';
 
 const Header = ({ setTheme }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [searchValue, setSearchValue] = useState("");
 
     const toggleDropdown = (menu) => {
         setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -94,8 +95,26 @@ const Header = ({ setTheme }) => {
                 { title: "Màu nền Đen", action: () => setTheme("dark") },
                 { title: "Màu nền Trắng", action: () => setTheme("light") }
             ]
+        },
+        {
+            id: "account",
+            title: "Tài khoản",
+            items: [
+                { title: "Đăng nhập", to: "/login" },
+                { title: "Đăng ký", to: "/register" }
+            ]
         }
     ];
+
+    let navigate = useNavigate();
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchValue.trim() !== "") {
+            // Ví dụ chuyển trang tìm kiếm:
+            navigate(`/tim-kiem?tukhoa=${encodeURIComponent(searchValue)}`);
+        }
+    };
+
 
     return ( 
         <header className='header'>
@@ -147,6 +166,26 @@ const Header = ({ setTheme }) => {
                             </li>
                         ))}
                     </ul>
+
+                    <form className="search-form" onSubmit={handleSearch}>
+                        <div className="search-input-group">
+                            <input
+                                aria-label="Từ khóa tìm kiếm"
+                                role="search"
+                                className="search-input"
+                                id="search-input"
+                                type="search"
+                                name="tukhoa"
+                                placeholder="Tìm kiếm truyện..."
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                required
+                            />
+                            <button className="search-button" type="submit">
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </nav>
             <div className='header__breadcrumb'>
