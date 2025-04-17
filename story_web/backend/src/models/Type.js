@@ -14,4 +14,5 @@ const Type = sequelize.define("Type", {
   updatedAt: false,
 });
 
+
 module.exports =  Type;

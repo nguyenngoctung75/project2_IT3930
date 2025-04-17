@@ -22,7 +22,4 @@ const Story = sequelize.define("Story", {
   updatedAt: "updated_at",
 });
 
-// Thiết lập quan hệ
-Story.hasMany(Type, { foreignKey: "story_id", as: "types", onDelete: 'CASCADE' }); // Thêm tùy chọn này để tự động xóa type khi story bị xóa 
-
 module.exports =  Story;

@@ -211,9 +211,9 @@ def crawl_and_store_chapter(story_id, story_name, chapter_number):
 
 # Test crawl với truyện Kiếm Lai
 if __name__ == "__main__":
-    test_url = "https://truyenfull.vision/kiem-lai"
-    #Thứ tự các tham số: đường dẫn truyện -> chương bắt đầu -> chương kết thúcthúc
-    result = crawl_and_store_story(test_url, start_chapter=1, end_chapter=10)
+    test_url = "https://truyenfull.vision/vu-luyen-dien-phong"
+    #Thứ tự các tham số: đường dẫn truyện -> chương bắt đầu -> chương kết thúc - 1
+    result = crawl_and_store_story(test_url, start_chapter=1, end_chapter=101)
     if result:
         print(f"Crawled story: {result}")
     else:

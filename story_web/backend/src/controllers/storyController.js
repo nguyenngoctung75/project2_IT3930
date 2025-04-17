@@ -1,11 +1,39 @@
 const { cleanContent } = require("../utils/cleanContent")
-const Story = require("../models/Story")
-const Type = require("../models/Type")
+const { Story, Type, Chapter } = require("../models")
+const sequelize = require('../config/database');
 
 //Lấy danh sách truyện
 exports.getAllStories = async (req, res) => {
     try {
-        const stories = await Story.findAll()
+        const stories = await Story.findAll({
+            attributes: {
+                include: [
+                    // Thêm trường đếm số chapter
+                    [sequelize.fn('COUNT', sequelize.col('chapters.id')), 'chapterCount']
+                ]
+            },
+            include: [
+                {
+                    model: Type,
+                    as: "types", // phải đúng alias
+                    attributes: ["id", "story_type"],
+                },
+                {
+                    model: Chapter,
+                    as: "chapters",
+                    attributes: [],
+                    required: false // LEFT JOIN thay vì INNER JOIN
+                }
+            ],
+            group: [
+                'Story.id',
+                'Story.created_at', // Phải thêm vào group by nếu dùng trong order
+                'types.id',        // Các trường trong include cũng phải thêm vào group
+                'types.story_type'
+            ], // Nhóm theo Story để đếm chapters
+            order: [["created_at", "ASC"]],
+            subQuery: false // Cho phép truy vấn phức tạp
+        })
 
         // Làm sạch content trước khi gửi về client
         // const cleanedStories = stories.map(story => ({
@@ -28,6 +56,43 @@ exports.getStoriesByType = async (req, res) => {
             'tien-hiep': 'Tiên Hiệp',
             'kiem-hiep': 'Kiếm Hiệp',
             'ngon-tinh': 'Ngôn Tình',
+            'dam-my': 'Đam Mỹ',
+            'quan-truong': 'Quan Trường',
+            'vong-du': 'Võng Du',
+            'khoa-huyen': 'Khoa Huyễn',
+            'he-thong': 'Hệ Thống',
+            'huyen-huyen': 'Huyền Huyễn',
+            'di-gioi': 'Dị Giới',
+            'di-nang': 'Dị Năng',
+            'sac': 'Sắc',
+            'quan-su': 'Quân Sự',
+            'lich-su': 'Lịch Sử',
+            'xuyen-khong': 'Xuyên Không',
+            'xuyen-nhanh': 'Xuyên Nhanh',
+            'trong-sinh': 'Trọng Sinh',
+            'trinh-tham': 'Trinh Thám',
+            'tham-hiem': 'Thám Hiểm',
+            'linh-di': 'Linh Dị',
+            'nguoc': 'Ngược',
+            'sung': 'Sủng',
+            'cung-dau': 'Cung Đấu',
+            'nu-cuong': 'Nữ Cường',
+            'gia-dau': 'Gia Đấu',
+            'dong-phuong': 'Đông Phương',
+            'do-thi': 'Đô Thị',
+            'bach-hop': 'Bách Hợp',
+            'hai-huoc': 'Hài Hước',
+            'dien-van': 'Điền Văn',
+            'co-dai': 'Cổ Đại',
+            'mat-the': 'Mạt Thế',
+            'truyen-teen': 'Truyện Teen',
+            'phuong-tay': 'Phương Tây',
+            'nu-phu': 'Nữ Phụ',
+            'Light Novel': 'Light Novel',
+            'viet-nam': 'Việt Nam',
+            'doan-van': 'Đoản Văn',
+            'review-sach': 'Review sách',
+            'khac': 'Khác',
             // Thêm các mapping khác tại đây
         };
 
@@ -65,7 +130,13 @@ exports.getStoriesByType = async (req, res) => {
 // Lấy chi tiết truyện theo ID
 exports.getStoryById = async (req, res) => {
     try {
-        const story = await Story.findByPk(req.params.id)
+        const story = await Story.findByPk(req.params.id, {
+            include: {
+                model: Type,
+                as: "types", // đúng alias
+                attributes: ['id', 'story_type'] // lấy thông tin cần thiết
+            }
+        })
         if (story) {
             res.json(story)
         } else {

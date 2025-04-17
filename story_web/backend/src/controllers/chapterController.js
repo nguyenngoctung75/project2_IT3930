@@ -1,6 +1,5 @@
 const { cleanContent } = require("../utils/cleanContent")
-const Chapter = require("../models/Chapter")
-const Story = require("../models/Story")
+const { Story, Chapter } = require("../models")
 
 // Lấy danh sách chương của 1 truyện
 exports.getChaptersByStoryId = async (req, res) => {

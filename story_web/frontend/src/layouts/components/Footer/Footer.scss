@@ -1,0 +1,82 @@
+.footer {
+    background-color: var(--white-color);
+    border-top: 1px solid rgb(204, 204, 204);
+    padding-top: 0.5rem;
+  
+    &__info {
+      margin-bottom: 1rem;
+    }
+  
+    &__link {
+      color: var(--text-dark-color);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  
+    &__tags {
+        display: flex;          // Bật chế độ flex
+        flex-wrap: wrap;        // Cho phép xuống dòng khi không đủ chỗ
+        gap: 0.5rem;           // Khoảng cách giữa các item
+        list-style: none;       // Bỏ dấu chấm đầu dòng
+        padding-left: 0;        // Bỏ padding mặc định
+        margin: 0;             // Reset margin
+    }
+  
+    &__tag-item {
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+      max-width: 140px;
+    }
+  
+    &__tag-badge {
+      display: inline-block;
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text-dark-color);
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+      background-color: var(--white-color);
+    }
+  
+    &__tag-link {
+    color: var(--text-dark-color);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  
+    &__license {
+      text-align: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgb(204, 204, 204);
+  
+      &-img {
+        border-width: 0;
+        margin-bottom: 10px;
+      }
+  
+      &-text {
+        margin-bottom: 0;
+      }
+  
+      &-link {
+        color: var(--text-dark-color);
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+}
+  

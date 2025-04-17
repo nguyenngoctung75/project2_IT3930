@@ -1,4 +1,5 @@
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import './DefaultLayout.module.scss';
 import { useState, useEffect } from "react"
 function DefaultLayout({ children }) {
@@ -14,6 +15,7 @@ function DefaultLayout({ children }) {
             <div>
                 {children}
             </div>
+            <Footer />
         </div>
     );
 }

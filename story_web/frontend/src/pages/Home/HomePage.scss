@@ -1,0 +1,231 @@
+
+//CSS phan truyen hot
+.section-stories-image {
+    margin-top: 30px;
+}
+
+.head-title-global {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.head-title-global__left {
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--text-color);
+}
+
+.head-title-global__content {
+    margin-right: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--text-color);
+}
+
+.form-select {
+    width: 100%;
+    padding: 6px 36px 6px 12px;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
+
+.section-stories-image__list {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-top: 16px;
+    gap: 16px;
+}
+
+// Danh sach truyen hot
+.story-item__have-image {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    &__image {
+        width: 100%;
+        padding-top: 140%; // tỷ lệ ảnh đứng
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid #eee;
+
+        img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__name {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        color: var(--text-white-color);
+        background-color: rgba(0, 0, 0, 0.6);
+        text-shadow: 1px 2px 2px #000;
+        font-size: 1.2rem;
+        font-weight: 500;
+        display: block;
+        text-align: center;
+        padding: 5px 0;
+        margin-top: 2px;
+    }
+
+    .list-badge {
+        display: flex;
+        flex-direction: column;
+        left: 5px;
+        top: 5px;
+        position: absolute;
+    }
+}
+
+.story-item__badge {
+    color: var(--text-white-color);
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    padding: 4.2px 7.8px;
+    margin-top: 5px;
+    border-radius: 6px;
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &.full {
+        background-color: #198754;
+    }
+
+    &.hot {
+        background-color: #DC3545;
+    }
+
+    &.new {
+        background-color: #0DCAF0;
+    }
+}
+
+// Danh sach truyen moi cap nhat
+.section-stories-new {
+    margin-top: 16px;
+}
+
+.story-item__no-image {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px dashed rgb(204, 204, 204);
+    a {
+        text-decoration: none;
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        border-right: 1px dashed rgb(204, 204, 204);
+
+        .story-item__badge {
+            margin-left: 5px;
+        }
+    }
+
+    h3 {
+        margin-left: 4px;
+        margin-bottom: 0px;
+        display: flex;
+        align-items: center;
+        color: var(--text-color);
+        font-size: 1.4rem;
+        padding-bottom: 8px;
+    }
+
+    &__name {
+        color: var(--text-color);
+        margin-left: 8px;
+
+        &:hover {
+            color: var(--text-color-hover);
+        }
+    }
+}
+
+.story-item__no-image__category {
+    width: 35%;
+    border-right: 1px dashed rgb(204, 204, 204);
+}
+
+.story-item__no-image__chapter,
+.story-item__no-image__category {
+    display: flex;
+    margin-left: 8px;
+    a {
+        text-decoration: none;
+        color: var(--text-color);
+
+        &:hover {
+            color: var(--text-color-hover);
+        }
+    }
+}
+
+.story-item__no-image__chapter a {
+    color: #0DCAF0;
+}
+
+.section-list-category {
+    border-radius: 6px;
+    background-color: rgb(248, 249, 250);
+    color: var(--text-dark-color);
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 2;
+    padding: 8px;
+    margin-top: 16px;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.list-category {
+    column-gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
+    list-style: none;
+    max-width: 100%;
+    flex-shrink: 0;
+    margin-top: 0;
+    padding-left: 16px;
+
+    a {
+        text-decoration: none;
+        color: var(--text-dark-color);
+        font-size: 1.6rem;
+        font-weight: 400;
+        padding-right: 40px;
+
+        &:hover {
+            color: var(--text-color-hover);
+        }
+    }
+}
