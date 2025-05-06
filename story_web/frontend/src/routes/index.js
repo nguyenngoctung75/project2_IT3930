@@ -13,6 +13,7 @@ const publicRoutes = [
     { path: config.routes.login, component: Login },    
     { path: config.routes.register, component: Register },
     { path: config.routes.category, component: Category },
+    { path: config.routes.categoryAll, component: Category },
 ]
 
 const privateRoutes = [

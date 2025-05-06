@@ -5,7 +5,6 @@ import StoryNewList from './StoryNewList';
 import ListCateGory from './ListCategory';
 import StoryCompleteList from './StoryCompleteList';
 import './HomePage.scss';
-import Story from '../Story';
 
 function HomePage() {
     const [stories, setStories] = useState([]);

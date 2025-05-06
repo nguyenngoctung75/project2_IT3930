@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -19,10 +19,10 @@ const Header = ({ setTheme }) => {
             id: "list",
             title: "Danh sách",
             items: [
-                { title: "Truyện mới cập nhật", to: "/truyen-moi" },
-                { title: "Truyện Hot", to: "/truyen-hot" },
-                { title: "Truyện Hay", to: "/truyen-hay" },
-                { title: "Truyện Full", to: "/truyen-full" }
+                { title: "Truyện mới cập nhật", to: "/category" },
+                { title: "Truyện Hot", to: "/category" },
+                { title: "Truyện Hay", to: "/category" },
+                { title: "Truyện Full", to: "/category" }
             ]
         },
         {
@@ -92,8 +92,37 @@ const Header = ({ setTheme }) => {
             id: "custom",
             title: "Tùy chỉnh",
             items: [
-                { title: "Màu nền Đen", action: () => setTheme("dark") },
-                { title: "Màu nền Trắng", action: () => setTheme("light") }
+                { 
+                    title: "Màu nền", 
+                    submenu: [
+                        { title: "Nền đen", action: () => setTheme("dark") },
+                        { title: "Nền trắng", action: () => setTheme("light") }
+                    ]
+                },
+                { 
+                    title: "Font chữ", 
+                    submenu: [
+                        { title: "Arial", action: () => updateStyle('fontFamily', 'Arial, sans-serif') },
+                        { title: "Times New Roman", action: () => updateStyle('fontFamily', '"Times New Roman", serif') },
+                        { title: "Roboto", action: () => updateStyle('fontFamily', '"Roboto", sans-serif') }
+                    ]
+                },
+                { 
+                    title: "Cỡ chữ", 
+                    submenu: [
+                        { title: "Nhỏ (1.6rem)", action: () => updateStyle('fontSize', '1.6rem') },
+                        { title: "Vừa (2rem)", action: () => updateStyle('fontSize', '2rem') },
+                        { title: "Lớn (2.4rem)", action: () => updateStyle('fontSize', '2.4rem') }
+                    ]
+                },
+                { 
+                    title: "Khoảng cách dòng", 
+                    submenu: [
+                        { title: "Chặt (1.5)", action: () => updateStyle('lineHeight', '1.5') },
+                        { title: "Vừa (1.8)", action: () => updateStyle('lineHeight', '1.8') },
+                        { title: "Rộng (2.2)", action: () => updateStyle('lineHeight', '2.2') }
+                    ]
+                }
             ]
         },
         {
@@ -105,6 +134,39 @@ const Header = ({ setTheme }) => {
             ]
         }
     ];
+
+    const updateStyle = (property, value) => {
+        const root = document.documentElement;
+        
+        switch(property) {
+            case 'fontSize':
+                root.style.setProperty('--chapter-font-size', value);
+                break;
+            case 'lineHeight':
+                root.style.setProperty('--chapter-line-height', value);
+                break;
+            case 'fontFamily':
+                root.style.setProperty('--chapter-font-family', value);
+                break;
+            case 'backgroundColor':
+                root.style.setProperty('--chapter-bg-color', value);
+                break;
+        }
+        
+        // Lưu vào localStorage để giữ cài đặt
+        localStorage.setItem(`chapterStyle_${property}`, value);
+    };
+
+    // Khôi phục cài đặt khi component mount
+    useEffect(() => {
+        const properties = ['fontSize', 'lineHeight', 'fontFamily', 'backgroundColor'];
+        properties.forEach(prop => {
+            const savedValue = localStorage.getItem(`chapterStyle_${prop}`);
+            if (savedValue) {
+                updateStyle(prop, savedValue);
+            }
+        });
+    }, []);
 
     let navigate = useNavigate();
     const handleSearch = (e) => {
@@ -136,31 +198,34 @@ const Header = ({ setTheme }) => {
                                 
                                 {activeDropdown === menu.id && (
                                     <div className={`dropdown-menu-container ${menu.multiColumn ? 'multi-column' : ''}`}>
-                                        {menu.multiColumn ? (
-                                            <div className='row'>
-                                                {menu.columns.map((column, index) => (
-                                                    <ul key={index} className="dropdown-menu col c-4">
-                                                        {column.map((item) => (
-                                                            <li key={item.title}>
-                                                                <Link to={item.to} title={item.title}>{item.title}</Link>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <ul className="dropdown-menu">
-                                                {menu.items.map((item) => (
-                                                    <li key={item.title} onClick={item.action || null}>
-                                                        {item.to ? (
-                                                            <Link to={item.to} title={item.title}>{item.title}</Link>
-                                                        ) : (
-                                                            item.title
-                                                        )}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
+                                        <ul className="dropdown-menu">
+                                            {menu.items.map((item) => (
+                                                <li key={item.title}>
+                                                    {item.submenu ? (
+                                                        <>
+                                                            <span>{item.title} →</span>
+                                                            <ul className="submenu">
+                                                                {item.submenu.map((subItem) => (
+                                                                    <li 
+                                                                        key={subItem.title} 
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            subItem.action();
+                                                                        }}
+                                                                    >
+                                                                        {subItem.title}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </>
+                                                    ) : item.to ? (
+                                                        <Link to={item.to}>{item.title}</Link>
+                                                    ) : (
+                                                        <span onClick={item.action}>{item.title}</span>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 )}
                             </li>

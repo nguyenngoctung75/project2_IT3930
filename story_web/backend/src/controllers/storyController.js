@@ -101,13 +101,33 @@ exports.getStoriesByType = async (req, res) => {
 
         // Lấy danh sách story có type trùng khớp
         const stories = await Story.findAll({
-            include: [{
-                model: Type,
-                as: 'types',
-                where: { story_type: typeName },
-                attributes: [], // Chỉ lọc, không lấy dữ liệu type
-                required: true // Sử dụng INNER JOIN thay vì LEFT JOIN
-            }],
+            attributes: {
+                include: [
+                    // Thêm trường đếm số chapter
+                    [sequelize.fn('COUNT', sequelize.col('chapters.id')), 'chapterCount']
+                ]
+            },
+            include: [
+                {
+                    model: Type,
+                    as: 'types',
+                    where: { story_type: typeName },
+                    attributes: [], // Chỉ lọc, không lấy dữ liệu type
+                    required: true // Sử dụng INNER JOIN thay vì LEFT JOIN
+                },
+                {
+                    model: Chapter,
+                    as: "chapters",
+                    attributes: [],
+                    required: false // LEFT JOIN thay vì INNER JOIN
+                }
+            ],
+            group: [
+                'Story.id',
+                'Story.created_at', // Phải thêm vào group by nếu dùng trong order
+                'types.id',        // Các trường trong include cũng phải thêm vào group
+                'types.story_type'
+            ], // Nhóm theo Story để đếm chapters
             order: [['created_at', 'DESC']] // Sắp xếp mới nhất trước
         });
 
@@ -131,11 +151,31 @@ exports.getStoriesByType = async (req, res) => {
 exports.getStoryById = async (req, res) => {
     try {
         const story = await Story.findByPk(req.params.id, {
-            include: {
-                model: Type,
-                as: "types", // đúng alias
-                attributes: ['id', 'story_type'] // lấy thông tin cần thiết
-            }
+            attributes: {
+                include: [
+                    [sequelize.fn('COUNT', sequelize.col('chapters.id')), 'chapterCount']
+                ]
+            },
+            include: [
+                {
+                    model: Type,
+                    as: "types", // đúng alias
+                    attributes: ['id', 'story_type'] // lấy thông tin cần thiết
+                },
+                
+                {
+                    model: Chapter,
+                    as: "chapters",
+                    attributes: [],
+                    required: false // LEFT JOIN thay vì INNER JOIN
+                }
+            ],
+            group: [
+                'Story.id',
+                'Story.created_at', // Phải thêm vào group by nếu dùng trong order
+                'types.id',        // Các trường trong include cũng phải thêm vào group
+                'types.story_type'
+            ]
         })
         if (story) {
             res.json(story)

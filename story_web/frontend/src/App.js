@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes';
 import DefaultLayout from '~/layouts';
-
+import './App.scss';
 function App() {
     return (
         <Router>
-            <div className="App" style={{margin: -8, backgroundColor: '#E1E1E1'}}>
+            <div className="App" style={{margin: -8}}>
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;

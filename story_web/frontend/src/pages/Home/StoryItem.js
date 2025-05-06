@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { convertToSlug } from './utils';
+import convertToSlug from '~/utils/convertToSlug';
 
 function StoryItem({ story, variant = 'hot' }) {
     if (variant === 'hot') {

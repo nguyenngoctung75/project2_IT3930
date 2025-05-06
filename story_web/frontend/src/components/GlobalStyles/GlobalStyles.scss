@@ -10,6 +10,11 @@
     --text-color-hover: #6E6E6E;
     --white-color: #FFF;
     --black-color: #000;
+    --page-btn-color: #34495E;
+    --chapter-font-size: 2rem;
+    --chapter-line-height: 1.8;
+    --chapter-font-family: initial;
+    --chapter-bg-color: inherit;
 }
 
 * {
@@ -30,12 +35,10 @@ body {
 
 body.dark-theme {
     --background-color: #222;
-    color: white;
 }
 
 body.light-theme {
     --background-color: #fff;
-    color: black;
 }
 
 /* 

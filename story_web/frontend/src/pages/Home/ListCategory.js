@@ -1,4 +1,4 @@
-import { convertToSlug } from './utils';
+import convertToSlug  from '~/utils/convertToSlug';
 import { Link } from 'react-router-dom';
 
 function ListCateGory() {

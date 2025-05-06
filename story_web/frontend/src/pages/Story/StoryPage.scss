@@ -1,0 +1,112 @@
+//story-detail__top
+/* Định dạng cho container chứa hình ảnh */
+.story-detail__top--image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Hiệu ứng 3D cho sách */
+.book-3d {
+    position: relative;
+    width: 200px;
+    /* Chiều rộng của hình ảnh sách */
+    height: 300px;
+    /* Chiều cao của hình ảnh sách */
+    transform-style: preserve-3d;
+    transform: perspective(1000px) rotateY(-3deg);
+    /* Tạo hiệu ứng nghiêng 3D */
+    transition: transform 0.3s ease;
+    /* Hiệu ứng chuyển động mượt mà */
+    outline: transparent solid 1px;
+    box-shadow: rgb(51, 51, 51) 5px 5px 20px;
+
+    &::after,
+    &::before {
+        content: " ";
+        height: 97%;
+        position: absolute;
+        top: 2px;
+        z-index: -1;
+    }
+
+    &::before {
+        background-color: rgb(0, 0, 0);
+        left: 7%;
+        width: 100px;
+    }
+
+    &::after {
+        background-color: rgb(239, 239, 239);
+        box-shadow: rgb(170, 170, 170) 0px 0px 5px inset;
+        left: 100%;
+        transform: perspective(300px) rotateY(20deg);
+        width: 4%;
+    }
+}
+
+/* Định dạng cho hình ảnh */
+.book-3d img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+    /* Tạo bóng đổ cho hiệu ứng 3D */
+}
+
+/* Hiệu ứng hover: Khi di chuột vào, sách sẽ đứng thẳng hơn */
+.book-3d:hover {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+}
+
+.story-name {
+    text-align: center;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 2.4rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--text-color);
+}
+
+//Rare Story
+.rate-story {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 4px 0 8px 0;
+}
+
+.story-detail__bottom {
+    margin-bottom: 16px;
+    margin-left: 4px;
+}
+
+.story-detail__bottom--info {
+    font-size: 1.2rem;
+}
+
+.story-detail__list-chapter--list__item {
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+
+            a {
+                color: #333;
+                text-decoration: none;
+
+                &:hover {
+                    color: var(--color-primary-hover);
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
