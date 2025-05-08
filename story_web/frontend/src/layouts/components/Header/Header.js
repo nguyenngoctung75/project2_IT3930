@@ -198,34 +198,48 @@ const Header = ({ setTheme }) => {
                                 
                                 {activeDropdown === menu.id && (
                                     <div className={`dropdown-menu-container ${menu.multiColumn ? 'multi-column' : ''}`}>
-                                        <ul className="dropdown-menu">
-                                            {menu.items.map((item) => (
-                                                <li key={item.title}>
-                                                    {item.submenu ? (
-                                                        <>
-                                                            <span>{item.title} →</span>
-                                                            <ul className="submenu">
-                                                                {item.submenu.map((subItem) => (
-                                                                    <li 
-                                                                        key={subItem.title} 
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            subItem.action();
-                                                                        }}
-                                                                    >
-                                                                        {subItem.title}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </>
-                                                    ) : item.to ? (
-                                                        <Link to={item.to}>{item.title}</Link>
-                                                    ) : (
-                                                        <span onClick={item.action}>{item.title}</span>
-                                                    )}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        {menu.multiColumn ? (
+                                            <div className='row'>
+                                                {menu.columns.map((column, index) => (
+                                                    <ul key={index} className="dropdown-menu col c-4">
+                                                        {column.map((item) => (
+                                                            <li key={item.title}>
+                                                                <Link to={item.to} title={item.title}>{item.title}</Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                ))}
+                                            </div>
+                                        ): (
+                                            <ul className="dropdown-menu">
+                                                {menu.items.map((item) => (
+                                                    <li key={item.title}>
+                                                        {item.submenu ? (
+                                                            <>
+                                                                <span>{item.title} →</span>
+                                                                <ul className="submenu">
+                                                                    {item.submenu.map((subItem) => (
+                                                                        <li 
+                                                                            key={subItem.title} 
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                subItem.action();
+                                                                            }}
+                                                                        >
+                                                                            {subItem.title}
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </>
+                                                        ) : item.to ? (
+                                                            <Link to={item.to}>{item.title}</Link>
+                                                        ) : (
+                                                            <span onClick={item.action}>{item.title}</span>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
                                     </div>
                                 )}
                             </li>
