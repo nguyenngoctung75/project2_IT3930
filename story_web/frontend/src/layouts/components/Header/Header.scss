@@ -177,3 +177,18 @@
 .search-button:hover {
     background-color: var(--color-primary-hover);
 }
+
+/* Avatar trong dropdown tài khoản */
+.navbar-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 15px;
+    border: 1px solid #fff; /* Thêm viền trắng để nổi bật */
+    transition: transform 0.2s;
+}
+
+.navbar-avatar:hover {
+    transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}

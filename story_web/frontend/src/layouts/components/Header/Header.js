@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import config from "~/config";
 import './Header.scss';
 import logo from '~/assets/images/header-logo.png';
+import defaultAvatar from '~/assets/images/default_user.jpg';
+import { AuthContext } from '~/utils/AuthContext';
 
 const Header = ({ setTheme }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [searchValue, setSearchValue] = useState("");
+    const { isLoggedIn, userAvatar, logout, userInfo } = useContext(AuthContext);
 
     const toggleDropdown = (menu) => {
         setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -124,14 +127,6 @@ const Header = ({ setTheme }) => {
                     ]
                 }
             ]
-        },
-        {
-            id: "account",
-            title: "Tài khoản",
-            items: [
-                { title: "Đăng nhập", to: "/login" },
-                { title: "Đăng ký", to: "/register" }
-            ]
         }
     ];
 
@@ -168,6 +163,7 @@ const Header = ({ setTheme }) => {
         });
     }, []);
 
+
     let navigate = useNavigate();
     const handleSearch = (e) => {
         e.preventDefault();
@@ -177,6 +173,25 @@ const Header = ({ setTheme }) => {
         }
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate('/login'); // Chuyển hướng về trang đăng nhập sau khi logout
+    };
+
+    const accountMenu = {
+        id: "account",
+        title: isLoggedIn ? "Tài khoản" : "Tài khoản",
+        items: isLoggedIn
+            ? [
+                  { title: "Xem lịch sử đọc truyện", to: "/history" },
+                  { title: "Cài đặt tài khoản", to: "/settings" },
+                  { title: "Đăng xuất", action: handleLogout }
+              ]
+            : [
+                  { title: "Đăng nhập", to: "/login" },
+                  { title: "Đăng ký", to: "/register" }
+              ]
+    };
 
     return ( 
         <header className='header'>
@@ -244,6 +259,40 @@ const Header = ({ setTheme }) => {
                                 )}
                             </li>
                         ))}
+                        <li
+                            className={`navbar-dropdown ${activeDropdown === "account" ? "active" : ""}`}
+                            onClick={() => toggleDropdown("account")}
+                        >
+                            {isLoggedIn ? (
+                                <img
+                                    src={userAvatar}
+                                    alt="User Avatar"
+                                    className="navbar-avatar"
+                                    onError={(e) => { e.target.src = defaultAvatar; }} // Fallback nếu ảnh lỗi
+                                />
+                            ) : (
+                                <div>
+                                    <FontAwesomeIcon icon={faList} className='dropdown-icon'/>
+                                    {accountMenu.title}
+                                </div>
+                            )}
+                            <FontAwesomeIcon icon={faCaretDown} className="dropdown-icon__down" />
+                            {activeDropdown === "account" && (
+                                <div className='dropdown-menu-container'>
+                                    <ul className='dropdown-menu'>
+                                        {accountMenu.items.map((item) => (
+                                            <li key={item.title}>
+                                                {item.to ? (
+                                                    <Link to={item.to}>{item.title}</Link>
+                                                ) : (
+                                                    <span onClick={item.action}>{item.title}</span>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </li>
                     </ul>
 
                     <form className="search-form" onSubmit={handleSearch}>

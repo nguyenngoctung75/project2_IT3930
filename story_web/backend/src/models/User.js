@@ -6,6 +6,7 @@ const User = sequelize.define("User", {
   email: { type: DataTypes.STRING, unique: true, allowNull: false },
   password: { type: DataTypes.STRING, allowNull: false },
   username: { type: DataTypes.STRING, allowNull: false },
+  useravatar: { type: DataTypes.STRING, allowNull: true },
   role: { type: DataTypes.ENUM("author", "admin", "user"), defaultValue: "user" },
   deleted_at: { type: DataTypes.DATE, allowNull: true },
 }, {
