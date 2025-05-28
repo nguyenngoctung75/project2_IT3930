@@ -10,6 +10,7 @@ root.render(
     <React.StrictMode>
         <GlobalStyles>
             <AuthProvider>
+                <div id="toast"></div>
                 <App />
             </AuthProvider>
         </GlobalStyles>

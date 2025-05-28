@@ -5,6 +5,7 @@ import axios from 'axios';
 import './RegisterPage.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { toast } from '~/utils/toast-message'; // Import toast function if needed
 
 const RegisterPage = () => {
     const [values, setValues] = useState({
@@ -49,11 +50,31 @@ const RegisterPage = () => {
                     password: values.password,
                 });
                 if (res.data.message === "Đăng ký thành công") {
+                    toast({
+                        title: "Thành công!",
+                        message: res.data.message,
+                        type: "success",
+                        duration: 3000,
+                    });
                     navigate('/login');
                 } else {
+                    toast({
+                        title: "Cảnh báo!",
+                        message: res.data.message,
+                        type: "warning",
+                        duration: 3000,
+                    });
                     alert(res.data.message);
                 }
             } catch (err) {
+                toast({
+                    title: "Thất bại!",
+                    message: `Có lỗi xảy ra: ${
+                        err.response?.data?.message || err.message
+                    }`,
+                    type: "error",
+                    duration: 5000,
+                });
                 console.log(err);
             }
         } else {

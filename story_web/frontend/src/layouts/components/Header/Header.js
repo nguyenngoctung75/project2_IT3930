@@ -11,7 +11,7 @@ import { AuthContext } from '~/utils/AuthContext';
 const Header = ({ setTheme }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [searchValue, setSearchValue] = useState("");
-    const { isLoggedIn, userAvatar, logout, userInfo } = useContext(AuthContext);
+    const { isLoggedIn, userAvatar, logout, userRole } = useContext(AuthContext);
 
     const toggleDropdown = (menu) => {
         setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -178,19 +178,28 @@ const Header = ({ setTheme }) => {
         navigate('/login'); // Chuyển hướng về trang đăng nhập sau khi logout
     };
 
+    const accountMenuItems = isLoggedIn
+    ? [
+          { title: "Xem lịch sử đọc truyện", to: "/history" },
+          { title: "Cài đặt tài khoản", to: "/settings" },
+          ...(userRole === 'admin' ? [
+              { title: "Xem thông tin tất cả user", to: "/admin/users" },
+              { title: "Quản lý truyện", to: "/admin/stories" },
+          ] : []),
+          ...(userRole === 'author' ? [
+              { title: "Quản lý truyện", to: "/author/stories" },
+          ] : []),
+          { title: "Đăng xuất", action: handleLogout },
+      ]
+    : [
+          { title: "Đăng nhập", to: "/login" },
+          { title: "Đăng ký", to: "/register" },
+      ];
+
     const accountMenu = {
         id: "account",
         title: isLoggedIn ? "Tài khoản" : "Tài khoản",
-        items: isLoggedIn
-            ? [
-                  { title: "Xem lịch sử đọc truyện", to: "/history" },
-                  { title: "Cài đặt tài khoản", to: "/settings" },
-                  { title: "Đăng xuất", action: handleLogout }
-              ]
-            : [
-                  { title: "Đăng nhập", to: "/login" },
-                  { title: "Đăng ký", to: "/register" }
-              ]
+        items: accountMenuItems,
     };
 
     return ( 

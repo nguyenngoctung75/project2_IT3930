@@ -4,6 +4,7 @@ import LoginValidation from './LoginValidation';
 import axios from 'axios';
 import './LoginPage.scss';
 import { AuthContext } from '~/utils/AuthContext';
+import { toast } from '~/utils/toast-message';
 
 const LoginPage = () => {
     const [values, setValues] = useState({
@@ -29,12 +30,32 @@ const LoginPage = () => {
                 const res = await axios.post('http://localhost:5000/api/auth/login', values);
                 console.log("Response from API:", res.data.message);
                 if (res.data.message === "Đăng nhập thành công") {
+                    toast({
+                        title: "Thành công!",
+                        message: res.data.message,
+                        type: "success",
+                        duration: 3000,
+                    });
                     login(res.data.user, res.data.userData, res.data.token); // Sử dụng hàm login từ AuthContext
                     navigate('/');
                 } else {
+                    toast({
+                        title: "Cảnh báo!",
+                        message: res.data.message,
+                        type: "warning",
+                        duration: 3000,
+                    });
                     alert(res.data.message);
                 }
             } catch (err) {
+                toast({
+                    title: "Thất bại!",
+                    message: `Có lỗi xảy ra: ${
+                        err.response?.data?.message || err.message
+                    }`,
+                    type: "error",
+                    duration: 5000,
+                });
                 console.log(err);
             }
         } else {
