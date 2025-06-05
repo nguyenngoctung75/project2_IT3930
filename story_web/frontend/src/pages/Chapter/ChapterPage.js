@@ -1,18 +1,24 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import './ChapterPage.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
 import sanitizeStoryContent from '~/utils/sanitizeStoryContent';
+import { AuthContext } from '~/utils/AuthContext';
 
 function ChapterPage() {
+    const { user, token } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { storyId, chapterNum } = useParams();
+    const [chapter, setChapter] = useState(null);
+    const [story, setStory] = useState(null);
     const [showChapterList, setShowChapterList] = useState(false);
+    const [hasSavedHistory, setHasSavedHistory] = useState(false); // Trạng thái để kiểm soát việc lưu lịch sử
 
     const handleRefresh = (e) => {
         e.preventDefault();
-        navigate(0); // Số 0 sẽ reload trang hiện tại
+        navigate(0);
     };
 
     const handlePrevChapter = (e) => {
@@ -32,10 +38,6 @@ function ChapterPage() {
     const toggleChapterList = () => {
         setShowChapterList(!showChapterList);
     };
-
-    const { storyId, chapterNum } = useParams();
-    const [chapter, setChapter] = useState(null);
-    const [story, setStory] = useState(null);
 
     // Xử lý chương trước/sau
     const goToPrevChapter = () => {
@@ -64,7 +66,7 @@ function ChapterPage() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [chapterNum, story]); // Thêm dependencies để cập nhật đúng giá trị
+    }, [chapterNum, story]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,17 +77,31 @@ function ChapterPage() {
                 ]);
                 setChapter(chapterRes.data);
                 setStory(storyRes.data);
+
+                // Chỉ gửi yêu cầu POST nếu chưa lưu lịch sử và có user/token
+                if (user && token && !hasSavedHistory && chapterRes.data.id) {
+                    await axios.post(
+                        'http://localhost:5000/api/history',
+                        {
+                            userId: user.id,
+                            chapterId: chapterRes.data.id,
+                        },
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                        }
+                    );
+                    setHasSavedHistory(true); // Đánh dấu đã lưu lịch sử
+                }
             } catch (err) {
                 console.error("Lỗi khi lấy chương hoặc truyện:", err);
             }
-        }
+        };
         fetchData();
-    }, [storyId, chapterNum]);
+    }, [storyId, chapterNum, user, token, hasSavedHistory]); // Thêm hasSavedHistory vào dependencies
 
     if (!chapter) return <div>Đang tải chương...</div>;
 
     return (
-
         <div className='chapter-wrapper'>
             <Link to={`/story/${storyId}`}>
                 <h1>{story.storyname}</h1>

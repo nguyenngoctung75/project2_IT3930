@@ -15,27 +15,30 @@ export const AuthProvider = ({ children }) => {
     // Kiểm tra xem có thông tin người dùng trong localStorage hay không
     const storedUser = JSON.parse(localStorage.getItem('user'));
     const storedUserInfo = JSON.parse(localStorage.getItem('userData'));
+    console.log('storedUser:', storedUser);
+    console.log('storedUserInfo:', storedUserInfo);
     console.log('defaultAvatar:', defaultAvatar); 
     if (storedUser) {
       setIsLoggedIn(storedUser);
       setUser(storedUser);
       const Role = storedUser.role;
       setUserRole(Role);
+      const avatar = storedUser.useravatar || defaultAvatar; 
+      setUserAvatar(avatar);
     }
     if (storedUserInfo){
       setUserInfo(storedUserInfo);
       //const profilePicture = storedUserInfo.personalInfo?.[0]?.profile_picture;
-      const avatar = defaultAvatar; 
-      setUserAvatar(avatar);
 
     //   const storedNotifications = storedUserInfo.notifications;
     //   if (storedNotifications) {
     //     setNotifications(storedNotifications); // Lấy tất cả thông báo
     //   }
 
-    } else {
-      setUserAvatar(defaultAvatar); // Đặt ảnh mặc định nếu không có storedUserInfo
-    }
+    } 
+    // else {
+    //   setUserAvatar(defaultAvatar); // Đặt ảnh mặc định nếu không có storedUserInfo
+    // }
   }, []);
 
   const logout = () => {
@@ -69,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, logout, login, userRole, setUserRole }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, logout, login, userRole, setUserRole, token: localStorage.getItem('token') }}>
       {children}
     </AuthContext.Provider>
   );

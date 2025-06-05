@@ -9,10 +9,6 @@ exports.getChaptersByStoryId = async (req, res) => {
             where: { story_id: storyId },
             order: [["chapternum", "ASC"]],
         });
-        
-        if (!chapters.length) {
-            return res.status(404).json({message: "Không tìm thấy chương nào của truyện với id = " + storyId})
-        }
 
         // Làm sạch content trước khi gửi về client
         // const cleanedChapters = chapters.map(chap => ({
@@ -48,27 +44,36 @@ exports.getChapterByNumber = async (req, res) => {
 // Thêm Chương mới
 exports.createChapter = async (req, res) => {
     try {
-        const { story_id, chapternum, chaptername, content } = req.body
+        const { story_id, chaptername, content } = req.body;
 
         // Kiểm tra truyện có tồn tại không
-        const story = await Story.findByPk(story_id)
+        const story = await Story.findByPk(story_id);
         if (!story) 
-            return res.status(404).json({message: "Không tìm thấy truyện với id = " + story_id})
+            return res.status(404).json({ message: "Không tìm thấy truyện với id = " + story_id });
 
-        // Kiểm tra chương đã tồn tại chưa
-        const existingChapter = await Chapter.findOne({
-            where: { story_id, chapternum },
-        })
+        // Lấy danh sách chương hiện có và tìm chapternum lớn nhất
+        const chapters = await Chapter.findAll({
+            where: { story_id, deleted_at: null }, // Chỉ lấy các chương chưa bị xóa mềm
+            order: [["chapternum", "DESC"]], // Sắp xếp giảm dần để lấy chapternum lớn nhất
+            limit: 1, // Chỉ cần chương mới nhất
+        });
 
-        if (existingChapter) 
-            return res.status(400).json({message: "Chương số " + chapternum + " đã tồn tại"})
-        
-        const newChapter = await Chapter.create({ story_id, chapternum, chaptername, content })
-        res.status(201).json(newChapter)
+        // Tính chapternum mới (chương cuối cùng + 1)
+        const newChapternum = chapters.length > 0 ? chapters[0].chapternum + 1 : 1;
+
+        // Tạo chương mới với chapternum tự động
+        const newChapter = await Chapter.create({
+            story_id,
+            chapternum: newChapternum,
+            chaptername,
+            content,
+        });
+
+        res.status(201).json(newChapter);
     } catch (error) {
-        res.status(500).json({message: error.message + "Lỗi khi thêm chương"})
+        res.status(500).json({ message: error.message + " Lỗi khi thêm chương" });
     }
-}
+};
 
 
 // Cập nhật chương

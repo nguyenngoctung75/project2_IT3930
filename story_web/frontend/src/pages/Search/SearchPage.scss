@@ -1,0 +1,42 @@
+.search-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .search-results {
+        list-style: none;
+        padding: 0;
+
+        .search-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 10px;
+
+            .result-link {
+                color: #007bff;
+                text-decoration: none;
+                font-size: 18px;
+                font-weight: 500;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            p {
+                color: #666;
+                margin-top: 5px;
+                font-size: 14px;
+            }
+        }
+    }
+}

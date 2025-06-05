@@ -8,10 +8,11 @@ import logo from '~/assets/images/header-logo.png';
 import defaultAvatar from '~/assets/images/default_user.jpg';
 import { AuthContext } from '~/utils/AuthContext';
 
+const BACKEND_URL = "http://localhost:5000"
 const Header = ({ setTheme }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [searchValue, setSearchValue] = useState("");
-    const { isLoggedIn, userAvatar, logout, userRole } = useContext(AuthContext);
+    const { isLoggedIn, userAvatar, logout, userRole, user } = useContext(AuthContext);
 
     const toggleDropdown = (menu) => {
         setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -169,7 +170,7 @@ const Header = ({ setTheme }) => {
         e.preventDefault();
         if (searchValue.trim() !== "") {
             // Ví dụ chuyển trang tìm kiếm:
-            navigate(`/tim-kiem?tukhoa=${encodeURIComponent(searchValue)}`);
+            navigate(`/search?tukhoa=${encodeURIComponent(searchValue)}`);
         }
     };
 
@@ -180,10 +181,10 @@ const Header = ({ setTheme }) => {
 
     const accountMenuItems = isLoggedIn
     ? [
-          { title: "Xem lịch sử đọc truyện", to: "/history" },
-          { title: "Cài đặt tài khoản", to: "/settings" },
+          { title: "Xem lịch sử đọc truyện", to: `/history/${user.id}` },
+          { title: "Cài đặt tài khoản", to: `/settings/${user.id}` },
           ...(userRole === 'admin' ? [
-              { title: "Xem thông tin tất cả user", to: "/admin/users" },
+              { title: "Thống kê", to: "/admin/data" },
               { title: "Quản lý truyện", to: "/admin/stories" },
           ] : []),
           ...(userRole === 'author' ? [
@@ -274,7 +275,7 @@ const Header = ({ setTheme }) => {
                         >
                             {isLoggedIn ? (
                                 <img
-                                    src={userAvatar}
+                                    src={`${BACKEND_URL}${userAvatar}`}
                                     alt="User Avatar"
                                     className="navbar-avatar"
                                     onError={(e) => { e.target.src = defaultAvatar; }} // Fallback nếu ảnh lỗi
