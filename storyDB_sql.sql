@@ -10,6 +10,7 @@ CREATE TABLE user (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     username VARCHAR(100) NOT NULL,
+    useravatar VARCHAR(255),
     role ENUM('author', 'admin', 'user') NOT NULL DEFAULT 'user'
 );
 

@@ -10,7 +10,7 @@ conn = mysql.connector.connect(
     host="localhost",
     user="root",
     password="07052004",
-    database="storydb"
+    database="story"
 )
 cursor = conn.cursor()
 
@@ -39,7 +39,7 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
         if response.status_code != 200:
             print(f"Failed to retrieve the page. Status code: {response.status_code}")
             return None
-        
+
         # Parse the HTML content
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -50,8 +50,8 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
         except Exception as e:
             print(f"Error extracting title: {e}")
             title = "Title extraction failed"
-    
-        
+
+
          # Extract the image URL (img tag with itemprop="image")
         try:
             image_tag = soup.find('img', itemprop='image')
@@ -85,7 +85,7 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
                     # Remove <b>, <b/>, <i/> tags but keep content
                     description = re.sub(r'</?(b|i|strong)\s*/?>', '\n', description)
                     # Loại bỏ thẻ <a>
-                    description = re.sub(r'</?a[^>]*>', '', description)  
+                    description = re.sub(r'</?a[^>]*>', '', description)
                     # Remove excess whitespace
                     description = description.strip()
         except Exception as e:
@@ -98,7 +98,7 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
         except Exception as e:
             print(f"Error setting additional fields: {e}")
             return None
-        
+
         # Kiểm tra truyện đã tồn tại chưa
         cursor.execute("SELECT id FROM story WHERE storyname = %s AND author = %s", (title, author_name))
         story = cursor.fetchone()
@@ -127,7 +127,7 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
                     conn.commit()
             except Exception as e:
                 print(f"Error extracting and storing types: {e}")
-        
+
 
         # Kiểm tra chương lớn nhất đã có trong database
         cursor.execute("SELECT MAX(chapternum) FROM chapter WHERE story_id = %s", (story_id,))
@@ -142,7 +142,7 @@ def crawl_and_store_story(url, start_chapter, end_chapter):
             result = crawl_and_store_chapter(story_id, title, chapter_number)
             if result == 'stop':
                 break
-        
+
         return {
             'id': story_id,
             'title': title,
@@ -169,7 +169,7 @@ def crawl_and_store_chapter(story_id, story_name, chapter_number):
     base_url = "https://truyenfull.vision"
     slug = slugify(story_name)
     url = f"{base_url}/{slug}/chuong-{chapter_number}/"
-    
+
     try:
         # Send GET request
         response = requests.get(url, timeout=10)
@@ -192,7 +192,7 @@ def crawl_and_store_chapter(story_id, story_name, chapter_number):
         if content_div:
             for script in content_div(["script", "style"]):
                 script.decompose()
-            content = content_div.get_text(separator='\n').strip() 
+            content = content_div.get_text(separator='\n').strip()
         else:
             content = "Content not found"
 
@@ -211,7 +211,7 @@ def crawl_and_store_chapter(story_id, story_name, chapter_number):
 
 # Test crawl với truyện Kiếm Lai
 if __name__ == "__main__":
-    test_url = "https://truyenfull.vision/vu-luyen-dien-phong"
+    test_url = "https://truyenfull.vision/cai-chet-cua-thai-tu-phi"
     #Thứ tự các tham số: đường dẫn truyện -> chương bắt đầu -> chương kết thúc - 1
     result = crawl_and_store_story(test_url, start_chapter=1, end_chapter=101)
     if result:
