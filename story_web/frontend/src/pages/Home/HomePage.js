@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import * as storyService from '~/services/storyService';
 import StoryHotList from './StoryHotList';
 import StoryNewList from './StoryNewList';
 import ListCateGory from './ListCategory';
@@ -10,16 +10,22 @@ function HomePage() {
     const [stories, setStories] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/stories')
-            .then(res => setStories(res.data))
-            .catch(err => console.error(err));
+        const fetchStories = async () => {
+            try {
+                const data = await storyService.getAllStories();
+                setStories(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchStories();
     }, []);
 
-    return ( 
+    return (
         <div>
             <StoryHotList stories={stories} />
             <div className='grid wide'>
-                <div className='row' style={{alignItems:'start'}}>
+                <div className='row' style={{ alignItems: 'start' }}>
                     <div className='col c-12 m-8 l-9'>
                         <StoryNewList stories={stories} />
                     </div>
@@ -28,7 +34,7 @@ function HomePage() {
                     </div>
                 </div>
             </div>
-            <StoryCompleteList stories={stories}/>
+            <StoryCompleteList stories={stories} />
         </div>
     );
 }

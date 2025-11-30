@@ -29,9 +29,9 @@ function StoryHotList({ stories }) {
                     <div className="col c-12">
                         <div className="section-stories-image__list">
                             {stories
-                                .filter(story => story.id >= 1 && story.id <= 16)
+                                .slice(0, 16)
                                 .map(story => (
-                                    <StoryItem 
+                                    <StoryItem
                                         key={story.id}
                                         story={story}
                                         variant="hot"
