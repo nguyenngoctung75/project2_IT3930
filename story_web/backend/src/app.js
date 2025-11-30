@@ -19,4 +19,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/history", historyRoutes);
 app.use('/api/users', userRoutes);
 
+// Global Error Handler
+const errorMiddleware = require('./middlewares/errorMiddleware');
+app.use(errorMiddleware);
+
 module.exports = app
